@@ -14,6 +14,8 @@ namespace StackOverflow.Web
 {
 	public class Startup
 	{
+		public const string CookieScheme = "YourSchemeName";
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -24,14 +26,11 @@ namespace StackOverflow.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.Configure<CookiePolicyOptions>(options =>
+			services.AddAuthentication(CookieScheme).AddCookie(CookieScheme, options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
-				options.CheckConsentNeeded = context => true;
-				options.MinimumSameSitePolicy = SameSiteMode.None;
+				options.AccessDeniedPath = "/user/signUp";
+				options.LoginPath = "/user/login";
 			});
-
-
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
@@ -50,7 +49,7 @@ namespace StackOverflow.Web
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-			app.UseCookiePolicy();
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{
