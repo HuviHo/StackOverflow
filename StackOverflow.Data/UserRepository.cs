@@ -35,5 +35,43 @@ namespace StackOverflow.Data
 			}
 			return password;
 		}
+
+
+		public int GetIdForEmail(string email)
+		{
+			int id = 0;
+			using (var context = new StackOverflowContext(_connectionString))
+			{
+				id = context.Users.FirstOrDefault(u => u.Email == email).Id;
+			}
+			return id;
+		}
+
+		public void PostQuestion(Question question)
+		{
+			using (var context = new StackOverflowContext(_connectionString))
+			{
+				context.Questions.Add(question);
+				context.SaveChanges();
+			}
+		}
+
+		public void PostAnswer(Answer answer)
+		{
+			using (var context = new StackOverflowContext(_connectionString))
+			{
+				context.Answers.Add(answer);
+				context.SaveChanges();
+			}
+		}
+		
+		public void PostLike(Like like)
+		{
+			using (var context = new StackOverflowContext(_connectionString))
+			{
+				context.Likes.Add(like);
+				context.SaveChanges();
+			}
+		}
 	}
 }

@@ -1,1 +1,17 @@
-﻿
+﻿@using StackOverflow.Data;
+@model List<Question>
+
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Question</th>
+    </tr>
+    @foreach (Question q in Model)
+    {
+        <tr>
+            <td>
+                <a href="/home/viewQuestion?questionId=@q.Id">@q.Title</a>
+            </td>
+        </tr>
+    }
+
+</table>

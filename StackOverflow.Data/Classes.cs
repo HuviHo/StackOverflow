@@ -61,4 +61,13 @@ namespace StackOverflow.Data
 		public Question Question { get; set; }
 		public Tag Tag { get; set; }
 	}
+
+	public class QuestionViewModel
+	{
+		public Question Question { get; set; }
+		public List<Tag> Tags { get; set; }
+		public int NumberOfLikes { get; set; }
+		public bool UserLiked { get; set; }
+		public List<Answer> Answers { get; set; }
+	}
 }

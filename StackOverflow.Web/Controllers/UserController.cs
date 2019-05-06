@@ -70,10 +70,41 @@ namespace StackOverflow.Web.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult PostQuestion()
+		public IActionResult PostQuestion(Question question)
 		{
-			
+			UserRepository repository = new UserRepository(_connectionString);
+			question.DatePosted = DateTime.Now;
+			question.UserId = repository.GetIdForEmail(User.Identity.Name);
+			repository.PostQuestion(question);
 			return Redirect("/home/index");
+		}
+
+
+
+		[HttpPost]
+		public IActionResult PostAnswer(Answer answer)
+		{
+			UserRepository repository = new UserRepository(_connectionString);
+
+			answer.UserId = repository.GetIdForEmail(User.Identity.Name);
+			repository.PostAnswer(answer);
+			return Json(answer.Text);
+		}
+
+		[HttpPost]
+		public IActionResult PostLike(int questionId)
+		{
+			UserRepository repository = new UserRepository(_connectionString);
+			HomeRepository homeRepository = new HomeRepository(_connectionString);
+			Like like = new Like
+			{
+				QuestionId=questionId,
+UserId =repository.GetIdForEmail(User.Identity.Name)
+			};
+			
+			repository.PostLike(like);
+			int numberOfLikes = homeRepository.GetNumberOfLikes(questionId);
+			return Json(numberOfLikes);
 		}
 
 		public IActionResult LogOut()
